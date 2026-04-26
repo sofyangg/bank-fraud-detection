@@ -2,10 +2,10 @@ import { Link } from "@tanstack/react-router"
 
 import { useTheme } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import icon from "/assets/images/fastapi-icon.svg"
-import iconLight from "/assets/images/fastapi-icon-light.svg"
-import logo from "/assets/images/fastapi-logo.svg"
-import logoLight from "/assets/images/fastapi-logo-light.svg"
+import icon from "/assets/images/johnny-automatic-sphinx.svg"
+import iconLight from "/assets/images/johnny-automatic-sphinx.svg"
+import logo from "/assets/images/johnny-automatic-sphinx.svg"
+import logoLight from "/assets/images/johnny-automatic-sphinx.svg"
 
 interface LogoProps {
   variant?: "full" | "icon" | "responsive"
@@ -21,8 +21,8 @@ export function Logo({
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === "dark"
 
-  const fullLogo = isDark ? logoLight : logo
-  const iconLogo = isDark ? iconLight : icon
+  const fullLogo = isDark ? icon : icon
+  const iconLogo = isDark ? icon : icon
 
   const content =
     variant === "responsive" ? (
