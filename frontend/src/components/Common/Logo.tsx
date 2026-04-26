@@ -21,8 +21,8 @@ export function Logo({
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === "dark"
 
-  const fullLogo = isDark ? icon : icon
-  const iconLogo = isDark ? icon : icon
+  const fullLogo = isDark ? logoLight : logo
+  const iconLogo = isDark ? iconLight : icon
 
   const content =
     variant === "responsive" ? (
