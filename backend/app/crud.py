@@ -1,10 +1,10 @@
 import uuid
-from typing import Any
+from typing import Any,List
 
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import Item, ItemCreate, User, UserCreate, UserUpdate,Transaction
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -66,3 +66,14 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+def add_transactions(*, session: Session, transactions_in: List[dict]): 
+    list_of_tx = [Transaction.model_validate(d) for d in transactions_in]
+    session.add_all(list_of_tx)
+    session.commit()
+    return {"status": "success"}
+
+
+### 4. Turn the DataFrame into a list of dictionaries
+# 'records' creates: [{"col1": val1}, {"col2": val2}]
+#data_dicts = df.to_dict(orient="records")
