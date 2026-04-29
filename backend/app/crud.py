@@ -71,6 +71,7 @@ def add_transactions(*, session: Session, transactions_in: List[dict]):
     list_of_tx = [Transaction.model_validate(d) for d in transactions_in]
     session.add_all(list_of_tx)
     session.commit()
+    session.refresh(list_of_tx)
     return {"status": "success"}
 
 
