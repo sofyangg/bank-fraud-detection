@@ -122,3 +122,27 @@
     cursor: pointer;
   }
 }
+
+.dropzone {
+  width: 320px;
+  height: 320px;
+  border: 2px dashed #9ca3af; /* gray */
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropzone:hover {
+  border-color: #6b7280;
+}
+
+.dropzone.active {
+  border-color: #2563eb; /* blue */
+  background-color: #eff6ff;
+}
