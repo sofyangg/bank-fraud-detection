@@ -24,7 +24,7 @@ router = APIRouter(prefix="/transactions", tags=["transactions"])
     "/upload",
     dependencies=[Depends(get_current_active_superuser)],
     response_model=List[Transaction],)
-async def Add_Tx(session: SessionDep,file: UploadFile = File(...))-> Any:
+async def Add_Tx(*,session: SessionDep,file: UploadFile = File(...))-> Any:
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="File must be a CSV")
     
