@@ -19,38 +19,39 @@ class UserBase(SQLModel):
 
 class Transaction(SQLModel, table=True):
     # IDs - Primary Key and searchable User ID
-    transaction_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    user_id: str = Field(index=True)
+    Transaction_ID: str = Field(primary_key=True)
+    User_ID: str = Field(index=True)
     
     # Numerical Features (float64 equivalents)
-    transaction_amount: float
-    account_balance: float
-    avg_transaction_amount_7d: float
-    transaction_distance: float
-    risk_score: float
+    Transaction_Amount: float
+    Account_Balance: float
+    Avg_Transaction_Amount_7d: float
+    Transaction_Distance: float
+    Risk_Score: float
     
     # Categorical Features (object equivalents)
-    transaction_type: str
-    device_type: str
-    location: str
-    merchant_category: str
-    card_type: str
-    authentication_method: str
+    Transaction_Type: str
+    Device_Type: str
+    Location: str
+    Merchant_Category: str
+    Card_Type: str
+    Authentication_Method: str
     
     # Date/Time
-    timestamp: datetime
+    Timestamp: datetime
     
     # Binary / Integer Flags (int64 equivalents)
     # Using int because XGBoost prefers 0/1 over True/False
-    ip_address_flag: int
-    previous_fraudulent_activity: int
-    is_weekend: int
-    fraud_label: int = Field(index=True)
+    IP_Address_Flag: int
+    Previous_Fraudulent_Activity: int
+    Is_Weekend: int
+    Fraud_Label: int | None = Field(default=None)
     
     # Counts
-    daily_transaction_count: int
-    failed_transaction_count_7d: int
-    card_age: int
+    Daily_Transaction_Count: int
+    Failed_Transaction_Count_7d: int
+    Card_Age: int
+
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):

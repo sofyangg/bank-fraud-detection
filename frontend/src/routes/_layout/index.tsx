@@ -123,6 +123,23 @@ export function CsvImportModule() {
     setHeaders([]);
   };
 
+  const handleConfirmImport = () => {
+    const mappedColumns = Object.entries(columnMapping).reduce<Record<string, string>>((acc, [systemField, header]) => {
+      if (header) {
+        acc[systemField] = header;
+      }
+      return acc;
+    }, {});
+
+    if (Object.keys(mappedColumns).length === 0) {
+      alert('Please map at least one column before confirming the import.');
+      return;
+    }
+
+    console.log('Confirm import with mapping:', mappedColumns);
+    alert('Proceeding with column mapping: ' + JSON.stringify(mappedColumns));
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-slate-200">
       <h2 className="text-xl font-semibold text-slate-800 mb-6">Import Transactions</h2>
@@ -239,8 +256,9 @@ export function CsvImportModule() {
               Cancel
             </button>
             <button
-              onClick={() => alert('Proceeding with column mapping: ' + JSON.stringify(columnMapping))}
-              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
+              onClick={handleConfirmImport}
+              disabled={Object.values(columnMapping).every((value) => !value)}
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm disabled:cursor-not-allowed disabled:bg-slate-400"
             >
               Confirm Import
             </button>

@@ -1,0 +1,6 @@
+[2026-05-03T19:51:17.681Z] Error: missing input - which OpenAPI specification should we use to generate your output?
+Stack:
+Error: missing input - which OpenAPI specification should we use to generate your output?
+    at Pm (C:\Users\Asus\Desktop\PFE\Stage\App\bank-fraud-detection\node_modules\@hey-api\openapi-ts\dist\index.cjs:42:76248)
+    at async d$ (C:\Users\Asus\Desktop\PFE\Stage\App\bank-fraud-detection\node_modules\@hey-api\openapi-ts\dist\index.cjs:1338:4485)
+    at async start (C:\Users\Asus\Desktop\PFE\Stage\App\bank-fraud-detection\node_modules\@hey-api\openapi-ts\bin\index.cjs:131:21)

@@ -9,6 +9,10 @@ export type Body_login_login_access_token = {
     client_secret?: (string | null);
 };
 
+export type Body_transactions_Add_Tx = {
+    file: (Blob | File);
+};
+
 export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
@@ -55,6 +59,30 @@ export type PrivateUserCreate = {
 export type Token = {
     access_token: string;
     token_type?: string;
+};
+
+export type Transaction = {
+    Transaction_ID: string;
+    User_ID: string;
+    Transaction_Amount: number;
+    Account_Balance: number;
+    Avg_Transaction_Amount_7d: number;
+    Transaction_Distance: number;
+    Risk_Score: number;
+    Transaction_Type: string;
+    Device_Type: string;
+    Location: string;
+    Merchant_Category: string;
+    Card_Type: string;
+    Authentication_Method: string;
+    Timestamp: string;
+    IP_Address_Flag: number;
+    Previous_Fraudulent_Activity: number;
+    Is_Weekend: number;
+    Fraud_Label?: (number | null);
+    Daily_Transaction_Count: number;
+    Failed_Transaction_Count_7d: number;
+    Card_Age: number;
 };
 
 export type UpdatePassword = {
@@ -172,6 +200,12 @@ export type PrivateCreateUserData = {
 };
 
 export type PrivateCreateUserResponse = (UserPublic);
+
+export type TransactionsAddTxData = {
+    formData: Body_transactions_Add_Tx;
+};
+
+export type TransactionsAddTxResponse = (Array<Transaction>);
 
 export type UsersReadUsersData = {
     limit?: number;

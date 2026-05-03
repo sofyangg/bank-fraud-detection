@@ -57,6 +57,19 @@ export const Body_login_login_access_tokenSchema = {
     title: 'Body_login-login_access_token'
 } as const;
 
+export const Body_transactions_Add_TxSchema = {
+    properties: {
+        file: {
+            type: 'string',
+            format: 'binary',
+            title: 'File'
+        }
+    },
+    type: 'object',
+    required: ['file'],
+    title: 'Body_transactions-Add_Tx'
+} as const;
+
 export const HTTPValidationErrorSchema = {
     properties: {
         detail: {
@@ -266,6 +279,106 @@ export const TokenSchema = {
     type: 'object',
     required: ['access_token'],
     title: 'Token'
+} as const;
+
+export const TransactionSchema = {
+    properties: {
+        Transaction_ID: {
+            type: 'string',
+            title: 'Transaction Id'
+        },
+        User_ID: {
+            type: 'string',
+            title: 'User Id'
+        },
+        Transaction_Amount: {
+            type: 'number',
+            title: 'Transaction Amount'
+        },
+        Account_Balance: {
+            type: 'number',
+            title: 'Account Balance'
+        },
+        Avg_Transaction_Amount_7d: {
+            type: 'number',
+            title: 'Avg Transaction Amount 7D'
+        },
+        Transaction_Distance: {
+            type: 'number',
+            title: 'Transaction Distance'
+        },
+        Risk_Score: {
+            type: 'number',
+            title: 'Risk Score'
+        },
+        Transaction_Type: {
+            type: 'string',
+            title: 'Transaction Type'
+        },
+        Device_Type: {
+            type: 'string',
+            title: 'Device Type'
+        },
+        Location: {
+            type: 'string',
+            title: 'Location'
+        },
+        Merchant_Category: {
+            type: 'string',
+            title: 'Merchant Category'
+        },
+        Card_Type: {
+            type: 'string',
+            title: 'Card Type'
+        },
+        Authentication_Method: {
+            type: 'string',
+            title: 'Authentication Method'
+        },
+        Timestamp: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Timestamp'
+        },
+        IP_Address_Flag: {
+            type: 'integer',
+            title: 'Ip Address Flag'
+        },
+        Previous_Fraudulent_Activity: {
+            type: 'integer',
+            title: 'Previous Fraudulent Activity'
+        },
+        Is_Weekend: {
+            type: 'integer',
+            title: 'Is Weekend'
+        },
+        Fraud_Label: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Fraud Label'
+        },
+        Daily_Transaction_Count: {
+            type: 'integer',
+            title: 'Daily Transaction Count'
+        },
+        Failed_Transaction_Count_7d: {
+            type: 'integer',
+            title: 'Failed Transaction Count 7D'
+        },
+        Card_Age: {
+            type: 'integer',
+            title: 'Card Age'
+        }
+    },
+    type: 'object',
+    required: ['Transaction_ID', 'User_ID', 'Transaction_Amount', 'Account_Balance', 'Avg_Transaction_Amount_7d', 'Transaction_Distance', 'Risk_Score', 'Transaction_Type', 'Device_Type', 'Location', 'Merchant_Category', 'Card_Type', 'Authentication_Method', 'Timestamp', 'IP_Address_Flag', 'Previous_Fraudulent_Activity', 'Is_Weekend', 'Daily_Transaction_Count', 'Failed_Transaction_Count_7d', 'Card_Age'],
+    title: 'Transaction'
 } as const;
 
 export const UpdatePasswordSchema = {
