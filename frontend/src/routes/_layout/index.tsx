@@ -2,6 +2,9 @@ import  { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { CloudArrowUpIcon, CheckCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { createFileRoute } from "@tanstack/react-router"
+import { TransactionsService } from "@/client"
+
+
 
 export const Route = createFileRoute("/_layout/")({
   component: CsvImportModule,
@@ -99,7 +102,7 @@ export function CsvImportModule() {
     setFile(selectedFile);
     processFileWithProgress(selectedFile);
   }, []);
-
+  
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -115,6 +118,32 @@ export function CsvImportModule() {
     }));
   };
 
+
+  const handleUpload = async () => {
+    if (!file) {
+      console.log('No file selected.');
+      return;
+    }
+
+    try {
+      console.log('Uploading...');
+
+      // Call the generated SDK function
+      await TransactionsService.addTx({
+        formData: {
+          file: file,
+        },
+      });
+
+      console.log('Transaction uploaded successfully!');
+    } catch (error) {
+      console.log('Failed to upload the transaction.');
+      console.error('Error uploading file:', error);
+    }
+  };
+
+
+
   const handleReset = () => {
     setFile(null);
     setUploadProgress(0);
@@ -122,24 +151,7 @@ export function CsvImportModule() {
     setColumnMapping({});
     setHeaders([]);
   };
-
-  const handleConfirmImport = () => {
-    const mappedColumns = Object.entries(columnMapping).reduce<Record<string, string>>((acc, [systemField, header]) => {
-      if (header) {
-        acc[systemField] = header;
-      }
-      return acc;
-    }, {});
-
-    if (Object.keys(mappedColumns).length === 0) {
-      alert('Please map at least one column before confirming the import.');
-      return;
-    }
-
-    console.log('Confirm import with mapping:', mappedColumns);
-    alert('Proceeding with column mapping: ' + JSON.stringify(mappedColumns));
-  };
-
+  
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-slate-200">
       <h2 className="text-xl font-semibold text-slate-800 mb-6">Import Transactions</h2>
@@ -256,9 +268,8 @@ export function CsvImportModule() {
               Cancel
             </button>
             <button
-              onClick={handleConfirmImport}
-              disabled={Object.values(columnMapping).every((value) => !value)}
-              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm disabled:cursor-not-allowed disabled:bg-slate-400"
+              onClick={handleUpload}
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
             >
               Confirm Import
             </button>
