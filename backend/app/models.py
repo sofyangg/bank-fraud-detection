@@ -21,7 +21,7 @@ class Transaction(SQLModel, table=True):
     __tablename__ = "Transaction"
     # IDs - Primary Key and searchable User ID
     Transaction_ID: str = Field(primary_key=True)
-    User_ID: str 
+    User_ID: str = Field(index=True)
     #= Field(index=True)
 
     # Numerical Features (float64 equivalents)
