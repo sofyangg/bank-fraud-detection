@@ -18,10 +18,12 @@ class UserBase(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
 
 class Transaction(SQLModel, table=True):
+    __tablename__ = "Transaction"
     # IDs - Primary Key and searchable User ID
     Transaction_ID: str = Field(primary_key=True)
-    User_ID: str = Field(index=True)
-    
+    User_ID: str 
+    #= Field(index=True)
+
     # Numerical Features (float64 equivalents)
     Transaction_Amount: float
     Account_Balance: float
