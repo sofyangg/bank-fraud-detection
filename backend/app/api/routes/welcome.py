@@ -7,7 +7,7 @@ from app.api.deps import (
     SessionDep,
     get_current_active_superuser,
 )
-
+from app.model import pipeline
 
 from app import crud
 from app.models import (
@@ -31,6 +31,9 @@ async def Add_Tx(*,session: SessionDep,file: UploadFile = File(...))-> Any:
     contents = await file.read()
     
     df = pd.read_csv(io.BytesIO(contents))
+    
+    df['Fraud_Label'] = pipeline.predict(df)
+    df['Fraud_Probability'] = pipeline.predict_proba(df)[:, 1]  # Get fraud probability (positive class)
     
     records = df.to_dict(orient="records")
     

@@ -49,6 +49,7 @@ class Transaction(SQLModel, table=True):
     Is_Weekend: int
     Fraud_Label: int | None = Field(default=None)
     
+    Fraud_Probability: float | None = Field(default=None)
     # Counts
     Daily_Transaction_Count: int
     Failed_Transaction_Count_7d: int
