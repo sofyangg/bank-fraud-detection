@@ -17,27 +17,12 @@ export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
 
-export type ItemCreate = {
-    title: string;
-    description?: (string | null);
-};
-
-export type ItemPublic = {
-    title: string;
-    description?: (string | null);
-    id: string;
-    owner_id: string;
-    created_at?: (string | null);
-};
-
-export type ItemsPublic = {
-    data: Array<ItemPublic>;
-    count: number;
-};
-
-export type ItemUpdate = {
-    title?: (string | null);
-    description?: (string | null);
+export type KPISummary = {
+    total_transactions: number;
+    total_exposure_amount: number;
+    total_fraud_count: number;
+    total_fraud_value: number;
+    avg_top_decile_risk: number;
 };
 
 export type Message = {
@@ -80,6 +65,7 @@ export type Transaction = {
     Previous_Fraudulent_Activity: number;
     Is_Weekend: number;
     Fraud_Label?: (number | null);
+    Fraud_Probability?: (number | null);
     Daily_Transaction_Count: number;
     Failed_Transaction_Count_7d: number;
     Card_Age: number;
@@ -137,37 +123,7 @@ export type ValidationError = {
     type: string;
 };
 
-export type ItemsReadItemsData = {
-    limit?: number;
-    skip?: number;
-};
-
-export type ItemsReadItemsResponse = (ItemsPublic);
-
-export type ItemsCreateItemData = {
-    requestBody: ItemCreate;
-};
-
-export type ItemsCreateItemResponse = (ItemPublic);
-
-export type ItemsReadItemData = {
-    id: string;
-};
-
-export type ItemsReadItemResponse = (ItemPublic);
-
-export type ItemsUpdateItemData = {
-    id: string;
-    requestBody: ItemUpdate;
-};
-
-export type ItemsUpdateItemResponse = (ItemPublic);
-
-export type ItemsDeleteItemData = {
-    id: string;
-};
-
-export type ItemsDeleteItemResponse = (Message);
+export type KpisReadKpisResponse = (KPISummary);
 
 export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;

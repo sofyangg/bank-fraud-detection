@@ -84,129 +84,32 @@ export const HTTPValidationErrorSchema = {
     title: 'HTTPValidationError'
 } as const;
 
-export const ItemCreateSchema = {
+export const KPISummarySchema = {
     properties: {
-        title: {
-            type: 'string',
-            maxLength: 255,
-            minLength: 1,
-            title: 'Title'
-        },
-        description: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 255
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Description'
-        }
-    },
-    type: 'object',
-    required: ['title'],
-    title: 'ItemCreate'
-} as const;
-
-export const ItemPublicSchema = {
-    properties: {
-        title: {
-            type: 'string',
-            maxLength: 255,
-            minLength: 1,
-            title: 'Title'
-        },
-        description: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 255
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Description'
-        },
-        id: {
-            type: 'string',
-            format: 'uuid',
-            title: 'Id'
-        },
-        owner_id: {
-            type: 'string',
-            format: 'uuid',
-            title: 'Owner Id'
-        },
-        created_at: {
-            anyOf: [
-                {
-                    type: 'string',
-                    format: 'date-time'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Created At'
-        }
-    },
-    type: 'object',
-    required: ['title', 'id', 'owner_id'],
-    title: 'ItemPublic'
-} as const;
-
-export const ItemUpdateSchema = {
-    properties: {
-        title: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 255,
-                    minLength: 1
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Title'
-        },
-        description: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 255
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Description'
-        }
-    },
-    type: 'object',
-    title: 'ItemUpdate'
-} as const;
-
-export const ItemsPublicSchema = {
-    properties: {
-        data: {
-            items: {
-                '$ref': '#/components/schemas/ItemPublic'
-            },
-            type: 'array',
-            title: 'Data'
-        },
-        count: {
+        total_transactions: {
             type: 'integer',
-            title: 'Count'
+            title: 'Total Transactions'
+        },
+        total_exposure_amount: {
+            type: 'number',
+            title: 'Total Exposure Amount'
+        },
+        total_fraud_count: {
+            type: 'integer',
+            title: 'Total Fraud Count'
+        },
+        total_fraud_value: {
+            type: 'number',
+            title: 'Total Fraud Value'
+        },
+        avg_top_decile_risk: {
+            type: 'number',
+            title: 'Avg Top Decile Risk'
         }
     },
     type: 'object',
-    required: ['data', 'count'],
-    title: 'ItemsPublic'
+    required: ['total_transactions', 'total_exposure_amount', 'total_fraud_count', 'total_fraud_value', 'avg_top_decile_risk'],
+    title: 'KPISummary'
 } as const;
 
 export const MessageSchema = {
@@ -362,6 +265,17 @@ export const TransactionSchema = {
                 }
             ],
             title: 'Fraud Label'
+        },
+        Fraud_Probability: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Fraud Probability'
         },
         Daily_Transaction_Count: {
             type: 'integer',

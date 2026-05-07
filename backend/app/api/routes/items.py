@@ -1,112 +1,58 @@
-import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
+from sqlalchemy import  distinct, case
+from app.api.deps import  SessionDep 
+from app.models import KPISummary,Transaction ,Message
 
-from app.api.deps import CurrentUser, SessionDep
-from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message
-
-router = APIRouter(prefix="/items", tags=["items"])
-
-
-@router.get("/", response_model=ItemsPublic)
-def read_items(
-    session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
+router = APIRouter(prefix="/dashboard_kpis", tags=["kpis"])
+@router.get("/",response_model=KPISummary)
+def read_kpis(
+    session: SessionDep
 ) -> Any:
-    """
-    Retrieve items.
-    """
-
-    if current_user.is_superuser:
-        count_statement = select(func.count()).select_from(Item)
-        count = session.exec(count_statement).one()
-        statement = (
-            select(Item).order_by(Item.created_at.desc()).offset(skip).limit(limit)
+    try:
+        # 1. Subquery: Calculate top 10% average risk
+        subq = (
+            select(func.avg(Transaction.Fraud_Probability))
+            .select_from(Transaction)
+            .order_by(Transaction.Fraud_Probability.desc())
+            .limit(
+                select(func.greatest(1, func.ceil(func.count(Transaction.Transaction_ID) * 0.10)))
+                .select_from(Transaction)
+                .scalar_subquery()
+            )
+            .scalar_subquery()
         )
-        items = session.exec(statement).all()
-    else:
-        count_statement = (
-            select(func.count())
-            .select_from(Item)
-            .where(Item.owner_id == current_user.id)
-        )
-        count = session.exec(count_statement).one()
-        statement = (
-            select(Item)
-            .where(Item.owner_id == current_user.id)
-            .order_by(Item.created_at.desc())
-            .offset(skip)
-            .limit(limit)
-        )
-        items = session.exec(statement).all()
-
-    return ItemsPublic(data=items, count=count)
-
-
-@router.get("/{id}", response_model=ItemPublic)
-def read_item(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Any:
-    """
-    Get item by ID.
-    """
-    item = session.get(Item, id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    if not current_user.is_superuser and (item.owner_id != current_user.id):
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    return item
+        # 2. Main query
+        stmt = select(
+            func.count(distinct(Transaction.Transaction_ID)).label("total_transactions"),
+            func.coalesce(func.sum(Transaction.Transaction_Amount), 0.0).label("total_exposure_amount"),
+            
+            # Count for fraud cases
+            func.count(
+                case((Transaction.Fraud_Label == 1, 1), else_=None)
+            ).label("total_fraud_count"),
+            
+            # Amount exposure for fraud cases 
+            func.coalesce(
+                func.sum(
+                    case((Transaction.Fraud_Label == 1, Transaction.Transaction_Amount), else_=0.0)
+                ), 
+                0.0
+            ).label("total_fraud_value"),
+            
+            # Top decile risk average
+            func.coalesce(subq, 0.0).label("avg_top_decile_risk")
+        ).select_from(Transaction)
+        KPIS = session.exec(stmt).one()
+        if not KPIS:
+            raise HTTPException(status_code=404, detail="No data found")
+        return KPISummary(total_transactions=int(KPIS.total_transactions), total_exposure_amount=float(KPIS.total_exposure_amount)
+        ,total_fraud_count=int(KPIS.total_fraud_count),total_fraud_value=float(KPIS.total_fraud_value)
+        ,avg_top_decile_risk=float(KPIS.avg_top_decile_risk))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database aggregation failed: {str(e)}")
 
 
-@router.post("/", response_model=ItemPublic)
-def create_item(
-    *, session: SessionDep, current_user: CurrentUser, item_in: ItemCreate
-) -> Any:
-    """
-    Create new item.
-    """
-    item = Item.model_validate(item_in, update={"owner_id": current_user.id})
-    session.add(item)
-    session.commit()
-    session.refresh(item)
-    return item
 
-
-@router.put("/{id}", response_model=ItemPublic)
-def update_item(
-    *,
-    session: SessionDep,
-    current_user: CurrentUser,
-    id: uuid.UUID,
-    item_in: ItemUpdate,
-) -> Any:
-    """
-    Update an item.
-    """
-    item = session.get(Item, id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    if not current_user.is_superuser and (item.owner_id != current_user.id):
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    update_dict = item_in.model_dump(exclude_unset=True)
-    item.sqlmodel_update(update_dict)
-    session.add(item)
-    session.commit()
-    session.refresh(item)
-    return item
-
-
-@router.delete("/{id}")
-def delete_item(
-    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
-) -> Message:
-    """
-    Delete an item.
-    """
-    item = session.get(Item, id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    if not current_user.is_superuser and (item.owner_id != current_user.id):
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    session.delete(item)
-    session.commit()
-    return Message(message="Item deleted successfully")

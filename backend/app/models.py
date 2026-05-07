@@ -165,3 +165,15 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=128)
+
+
+
+class KPISummary(SQLModel):
+    total_transactions: int
+    total_exposure_amount: float
+    total_fraud_count: int
+    total_fraud_value: float
+    avg_top_decile_risk: float
+
+
+
