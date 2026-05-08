@@ -1,23 +1,116 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { Search } from "lucide-react"
-import { Suspense } from "react"
 
-import { ItemsService } from "@/client"
-import { DataTable } from "@/components/Common/DataTable"
+import {
+  AlertTriangle,
+  Activity,TrendingUp} from "lucide-react"
+  /*
+import { Suspense } from "react"
+*/
+
+import { KpisService } from "@/client"
+/*
 import AddItem from "@/components/Items/AddItem"
 import { columns } from "@/components/Items/columns"
 import PendingItems from "@/components/Pending/PendingItems"
+*/
 
-function getItemsQueryOptions() {
+function getKPISummary() {
   return {
-    queryFn: () => ItemsService.readItems({ skip: 0, limit: 100 }),
-    queryKey: ["items"],
+    queryFn: () => KpisService.readKpis(),
+    queryKey: ["kpis"],
   }
 }
 
+
+function KPICards() {
+
+  const { data } = useSuspenseQuery(getKPISummary())
+  return (
+    <div className="grid grid-cols-12 gap-6">
+      {/* Total Analyzed */}
+      <div className="col-span-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-500">
+              Total Analyzed
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold text-gray-900">
+              {data.total_transactions.toLocaleString()}
+            </h2>
+
+            <p className="mt-2 text-sm text-gray-600">
+              $
+              {data.total_exposure_amount.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })}
+            </p>
+          </div>
+
+          <div className="rounded-xl bg-gray-100 p-3">
+            <Activity className="h-5 w-5 text-gray-700" />
+          </div>
+        </div>
+      </div>
+
+      {/* Flagged Transactions */}
+      <div className="col-span-3 rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-red-600">
+              Flagged Transactions
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold text-red-700">
+              {data.total_fraud_count.toLocaleString()}
+            </h2>
+
+            <p className="mt-2 text-sm text-red-500">
+              $
+              {data.total_fraud_value.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })}
+            </p>
+          </div>
+
+          <div className="rounded-xl bg-red-100 p-3">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+          </div>
+        </div>
+      </div>
+
+      {/* Avg Top Decile Risk */}
+      <div className="col-span-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-500">
+              Avg Top Decile Risk
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold text-gray-900">
+              {(data.avg_top_decile_risk * 100).toFixed(1)}%
+            </h2>
+
+            <p className="mt-2 text-sm text-gray-600">
+              Highest risk segment
+            </p>
+          </div>
+
+          <div className="rounded-xl bg-gray-100 p-3">
+            <TrendingUp className="h-5 w-5 text-gray-700" />
+          </div>
+        </div>
+      </div>
+    </div>
+)}
+
+
+
+
+
 export const Route = createFileRoute("/_layout/items")({
-  component: Items,
+  component: KPICards,
   head: () => ({
     meta: [
       {
@@ -26,44 +119,3 @@ export const Route = createFileRoute("/_layout/items")({
     ],
   }),
 })
-
-function ItemsTableContent() {
-  const { data: items } = useSuspenseQuery(getItemsQueryOptions())
-
-  if (items.data.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center text-center py-12">
-        <div className="rounded-full bg-muted p-4 mb-4">
-          <Search className="h-8 w-8 text-muted-foreground" />
-        </div>
-        <h3 className="text-lg font-semibold">You don't have any items yet</h3>
-        <p className="text-muted-foreground">Add a new item to get started</p>
-      </div>
-    )
-  }
-
-  return <DataTable columns={columns} data={items.data} />
-}
-
-function ItemsTable() {
-  return (
-    <Suspense fallback={<PendingItems />}>
-      <ItemsTableContent />
-    </Suspense>
-  )
-}
-
-function Items() {
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Items</h1>
-          <p className="text-muted-foreground">Create and manage your items</p>
-        </div>
-        <AddItem />
-      </div>
-      <ItemsTable />
-    </div>
-  )
-}
