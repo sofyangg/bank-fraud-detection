@@ -1,7 +1,7 @@
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select
+from sqlmodel import func, select, text
 from sqlalchemy import  distinct, case
 from app.api.deps import  SessionDep 
 from app.models import KPISummary,Transaction ,Message
@@ -12,45 +12,31 @@ def read_kpis(
     session: SessionDep
 ) -> Any:
     try:
-        # 1. Subquery: Calculate top 10% average risk
-        subq = (
-            select(func.avg(Transaction.Fraud_Probability))
-            .select_from(Transaction)
-            .order_by(Transaction.Fraud_Probability.desc())
-            .limit(
-                select(func.greatest(1, func.ceil(func.count(Transaction.Transaction_ID) * 0.10)))
-                .select_from(Transaction)
-                .scalar_subquery()
-            )
-            .scalar_subquery()
-        )
-        # 2. Main query
-        stmt = select(
-            func.count(distinct(Transaction.Transaction_ID)).label("total_transactions"),
-            func.coalesce(func.sum(Transaction.Transaction_Amount), 0.0).label("total_exposure_amount"),
-            
-            # Count for fraud cases
-            func.count(
-                case((Transaction.Fraud_Label == 1, 1), else_=None)
-            ).label("total_fraud_count"),
-            
-            # Amount exposure for fraud cases 
-            func.coalesce(
-                func.sum(
-                    case((Transaction.Fraud_Label == 1, Transaction.Transaction_Amount), else_=0.0)
-                ), 
-                0.0
-            ).label("total_fraud_value"),
-            
-            # Top decile risk average
-            func.coalesce(subq, 0.0).label("avg_top_decile_risk")
-        ).select_from(Transaction)
-        KPIS = session.exec(stmt).one()
+        query = text("""
+    WITH RankedTransactions AS (
+        SELECT 
+            "Transaction_Amount",
+            "Fraud_Label",
+            "Fraud_Probability",
+            PERCENT_RANK() OVER (ORDER BY "Fraud_Probability" DESC) as risk_percentile
+        FROM "Transaction"
+    )
+    SELECT 
+        COUNT(*) as total_transaction_count,
+        SUM("Transaction_Amount") as aggregate_monetary_value,
+        SUM(CASE WHEN "Fraud_Label" = 1 THEN 1 ELSE 0 END) as number_of_suspicious_records,
+        SUM(CASE WHEN "Fraud_Label" = 1 THEN "Transaction_Amount" ELSE 0 END) as total_fraud_value,
+        AVG("Fraud_Probability") FILTER (WHERE risk_percentile <= 0.1) as average_top_decile_risk
+    FROM RankedTransactions
+""")
+        
+        
+        KPIS = session.exec(query).one()
         if not KPIS:
             raise HTTPException(status_code=404, detail="No data found")
-        return KPISummary(total_transactions=int(KPIS.total_transactions), total_exposure_amount=float(KPIS.total_exposure_amount)
-        ,total_fraud_count=int(KPIS.total_fraud_count),total_fraud_value=float(KPIS.total_fraud_value)
-        ,avg_top_decile_risk=float(KPIS.avg_top_decile_risk))
+        return KPISummary(total_transactions=int(KPIS[0]), total_exposure_amount=float(KPIS[1])
+        ,total_fraud_count=int(KPIS[2]),total_fraud_value=float(KPIS[3])
+        ,avg_top_decile_risk=float(KPIS[4]))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database aggregation failed: {str(e)}")
 

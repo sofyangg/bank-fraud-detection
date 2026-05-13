@@ -16,8 +16,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
-import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
+import { Route as LayoutGraphsRouteImport } from './routes/_layout/graphs'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
+import { Route as LayoutKPICardsRouteImport } from './routes/_layout/KPICards'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -53,14 +54,19 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutItemsRoute = LayoutItemsRouteImport.update({
-  id: '/items',
-  path: '/items',
+const LayoutGraphsRoute = LayoutGraphsRouteImport.update({
+  id: '/graphs',
+  path: '/graphs',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutAdminRoute = LayoutAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutKPICardsRoute = LayoutKPICardsRouteImport.update({
+  id: '/KPICards',
+  path: '/KPICards',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -70,8 +76,9 @@ export interface FileRoutesByFullPath {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/KPICards': typeof LayoutKPICardsRoute
   '/admin': typeof LayoutAdminRoute
-  '/items': typeof LayoutItemsRoute
+  '/graphs': typeof LayoutGraphsRoute
   '/settings': typeof LayoutSettingsRoute
 }
 export interface FileRoutesByTo {
@@ -79,8 +86,9 @@ export interface FileRoutesByTo {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/KPICards': typeof LayoutKPICardsRoute
   '/admin': typeof LayoutAdminRoute
-  '/items': typeof LayoutItemsRoute
+  '/graphs': typeof LayoutGraphsRoute
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
 }
@@ -91,8 +99,9 @@ export interface FileRoutesById {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/_layout/KPICards': typeof LayoutKPICardsRoute
   '/_layout/admin': typeof LayoutAdminRoute
-  '/_layout/items': typeof LayoutItemsRoute
+  '/_layout/graphs': typeof LayoutGraphsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/': typeof LayoutIndexRoute
 }
@@ -104,8 +113,9 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
+    | '/KPICards'
     | '/admin'
-    | '/items'
+    | '/graphs'
     | '/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -113,8 +123,9 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
+    | '/KPICards'
     | '/admin'
-    | '/items'
+    | '/graphs'
     | '/settings'
     | '/'
   id:
@@ -124,8 +135,9 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
+    | '/_layout/KPICards'
     | '/_layout/admin'
-    | '/_layout/items'
+    | '/_layout/graphs'
     | '/_layout/settings'
     | '/_layout/'
   fileRoutesById: FileRoutesById
@@ -189,11 +201,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/items': {
-      id: '/_layout/items'
-      path: '/items'
-      fullPath: '/items'
-      preLoaderRoute: typeof LayoutItemsRouteImport
+    '/_layout/graphs': {
+      id: '/_layout/graphs'
+      path: '/graphs'
+      fullPath: '/graphs'
+      preLoaderRoute: typeof LayoutGraphsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/admin': {
@@ -203,19 +215,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAdminRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/KPICards': {
+      id: '/_layout/KPICards'
+      path: '/KPICards'
+      fullPath: '/KPICards'
+      preLoaderRoute: typeof LayoutKPICardsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
   }
 }
 
 interface LayoutRouteChildren {
+  LayoutKPICardsRoute: typeof LayoutKPICardsRoute
   LayoutAdminRoute: typeof LayoutAdminRoute
-  LayoutItemsRoute: typeof LayoutItemsRoute
+  LayoutGraphsRoute: typeof LayoutGraphsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutKPICardsRoute: LayoutKPICardsRoute,
   LayoutAdminRoute: LayoutAdminRoute,
-  LayoutItemsRoute: LayoutItemsRoute,
+  LayoutGraphsRoute: LayoutGraphsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }

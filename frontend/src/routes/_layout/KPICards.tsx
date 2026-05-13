@@ -109,7 +109,7 @@ function KPICards() {
 
 
 
-export const Route = createFileRoute("/_layout/items")({
+export const Route = createFileRoute("/_layout/KPICards")({
   component: KPICards,
   head: () => ({
     meta: [
