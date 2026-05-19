@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime, timezone
+from typing import List, Tuple
 
 from pydantic import EmailStr
 from sqlalchemy import DateTime
@@ -23,7 +24,7 @@ class Transaction(SQLModel, table=True):
     Transaction_ID: str = Field(primary_key=True)
     User_ID: str = Field(index=True)
     #= Field(index=True)
-
+    
     # Numerical Features (float64 equivalents)
     Transaction_Amount: float
     Account_Balance: float
@@ -176,4 +177,68 @@ class KPISummary(SQLModel):
     avg_top_decile_risk: float
 
 
+class RadialPolarBar(SQLModel):
+    Hour_1: float
+    Hour_2: float
+    Hour_3: float
+    Hour_4: float
+    Hour_5: float
+    Hour_6: float
+    Hour_7: float
+    Hour_8: float
+    Hour_9: float
+    Hour_10: float
+    Hour_11: float
+    Hour_12: float
+    Hour_13: float
+    Hour_14: float
+    Hour_15: float
+    Hour_16: float
+    Hour_17: float
+    Hour_18: float
+    Hour_19: float
+    Hour_20: float
+    Hour_21: float
+    Hour_22: float
+    Hour_23: float
+    Hour_24: float
 
+
+class MetalBar_Data(SQLModel):
+    records: List[Tuple[float, float, int]]
+
+class HeatMap_Data(SQLModel):
+    Column_POS:Tuple[int, int, int]
+    POS_fraud:Tuple[float, float, float]
+    Column_Online:Tuple[int, int, int]
+    Online_fraud:Tuple[float, float, float]
+    Column_ATM_Withdrawal:Tuple[int, int, int]
+    ATM_Withdrawal_fraud:Tuple[float, float, float]
+    Column_Bank_Transfer:Tuple[int, int, int]
+    Bank_Transfer_fraud:Tuple[float, float, float]
+
+class Barchart_risk_bands_Data(SQLModel):
+    one_0_2: int
+    two_0_4: int
+    three_0_6: int
+    four_0_8: int
+    five_1: int
+
+
+
+
+class Sankey_Data(SQLModel):
+    Transaction_count:int
+    Transaction_Type_Values: Tuple[int, int, int,int]
+    Ttype_DeType_Laptop_Values: Tuple[int, int, int,int]
+    Ttype_DeType_Tablet_Values: Tuple[int, int, int,int]
+    Ttype_DeType_Mobile_Values: Tuple[int, int, int,int]
+    DeType_High_Risk_Values: Tuple[int, int, int]
+    DeType_Medium_Risk_Values: Tuple[int, int, int]
+    DeType_Low_Risk_Values: Tuple[int, int, int]
+
+class Visuals(SQLModel):
+    RadialPolar:RadialPolarBar
+    HeatMap:HeatMap_Data
+    Barchart:Barchart_risk_bands_Data
+    Sankey:Sankey_Data

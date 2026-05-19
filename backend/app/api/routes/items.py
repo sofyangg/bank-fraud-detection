@@ -1,10 +1,10 @@
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select, text
-from sqlalchemy import  distinct, case
+from sqlmodel import   text
+
 from app.api.deps import  SessionDep 
-from app.models import KPISummary,Transaction ,Message
+from app.models import KPISummary
 
 router = APIRouter(prefix="/dashboard_kpis", tags=["kpis"])
 @router.get("/",response_model=KPISummary)
