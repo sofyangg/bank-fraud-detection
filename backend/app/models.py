@@ -178,30 +178,7 @@ class KPISummary(SQLModel):
 
 
 class RadialPolarBar(SQLModel):
-    Hour_1: float
-    Hour_2: float
-    Hour_3: float
-    Hour_4: float
-    Hour_5: float
-    Hour_6: float
-    Hour_7: float
-    Hour_8: float
-    Hour_9: float
-    Hour_10: float
-    Hour_11: float
-    Hour_12: float
-    Hour_13: float
-    Hour_14: float
-    Hour_15: float
-    Hour_16: float
-    Hour_17: float
-    Hour_18: float
-    Hour_19: float
-    Hour_20: float
-    Hour_21: float
-    Hour_22: float
-    Hour_23: float
-    Hour_24: float
+    Hours: List[float]
 
 
 class MetalBar_Data(SQLModel):

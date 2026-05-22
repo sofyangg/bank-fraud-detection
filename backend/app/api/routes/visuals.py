@@ -23,15 +23,13 @@ def read_kpis(
         EXTRACT(HOUR FROM "Timestamp"::timestamp) ASC; 
         """)
         RadialPolar= session.exec(RadialPolarBar_query).all()
+        chart_data = [float(row[0]) for row in RadialPolar]
         if not RadialPolar:
             raise HTTPException(status_code=404, detail="No RadialPolarBar data found")
         print("RadialPolar")
         for row in RadialPolar:
             print(row)
-        RadialPolarBar_DATA=RadialPolarBar(Hour_1=RadialPolar[0][0],Hour_2=RadialPolar[1][0],Hour_3=RadialPolar[2][0],Hour_4=RadialPolar[3][0],Hour_5=RadialPolar[4][0],Hour_6=RadialPolar[5][0]
-                                           ,Hour_7=RadialPolar[6][0],Hour_8=RadialPolar[7][0],Hour_9=RadialPolar[8][0],Hour_10=RadialPolar[9][0],Hour_11=RadialPolar[10][0],Hour_12=RadialPolar[11][0]
-                                           ,Hour_13=RadialPolar[12][0],Hour_14=RadialPolar[13][0],Hour_15=RadialPolar[14][0],Hour_16=RadialPolar[15][0],Hour_17=RadialPolar[16][0],Hour_18=RadialPolar[17][0],Hour_19=RadialPolar[18][0]
-                                           ,Hour_20=RadialPolar[19][0],Hour_21=RadialPolar[20][0],Hour_22=RadialPolar[21][0],Hour_23=RadialPolar[22][0],Hour_24=RadialPolar[23][0])
+        RadialPolarBar_DATA=RadialPolarBar(Hours=chart_data)
         Heatmap_Query = text("""
             SELECT 
     ROUND(

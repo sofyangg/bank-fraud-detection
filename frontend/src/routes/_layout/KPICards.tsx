@@ -114,7 +114,7 @@ export const Route = createFileRoute("/_layout/KPICards")({
   head: () => ({
     meta: [
       {
-        title: "Items - FastAPI Cloud",
+        title: "KPIs Sphynx",
       },
     ],
   }),
