@@ -8,7 +8,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-export default function PolarBarChart({ data, title, children }: Props) {
+export default function HeatMap({ data, title, children }: Props) {
   const chartRef = useRef<HTMLDivElement | null>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
   useEffect(() => {

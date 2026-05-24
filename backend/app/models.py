@@ -185,34 +185,19 @@ class MetalBar_Data(SQLModel):
     records: List[Tuple[float, float, int]]
 
 class HeatMap_Data(SQLModel):
-    Column_POS:Tuple[int, int, int]
-    POS_fraud:Tuple[float, float, float]
-    Column_Online:Tuple[int, int, int]
-    Online_fraud:Tuple[float, float, float]
-    Column_ATM_Withdrawal:Tuple[int, int, int]
-    ATM_Withdrawal_fraud:Tuple[float, float, float]
-    Column_Bank_Transfer:Tuple[int, int, int]
-    Bank_Transfer_fraud:Tuple[float, float, float]
+    heat: List[List[float]]
 
 class Barchart_risk_bands_Data(SQLModel):
-    one_0_2: int
-    two_0_4: int
-    three_0_6: int
-    four_0_8: int
-    five_1: int
+    bands:List[int]
 
-
+class Sankey_Link(SQLModel):
+    From:str
+    To:str
+    Value:int
 
 
 class Sankey_Data(SQLModel):
-    Transaction_count:int
-    Transaction_Type_Values: Tuple[int, int, int,int]
-    Ttype_DeType_Laptop_Values: Tuple[int, int, int,int]
-    Ttype_DeType_Tablet_Values: Tuple[int, int, int,int]
-    Ttype_DeType_Mobile_Values: Tuple[int, int, int,int]
-    DeType_High_Risk_Values: Tuple[int, int, int]
-    DeType_Medium_Risk_Values: Tuple[int, int, int]
-    DeType_Low_Risk_Values: Tuple[int, int, int]
+    Links:List[Sankey_Link]
 
 class Visuals(SQLModel):
     RadialPolar:RadialPolarBar

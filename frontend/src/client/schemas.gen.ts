@@ -2,29 +2,16 @@
 
 export const Barchart_risk_bands_DataSchema = {
     properties: {
-        one_0_2: {
-            type: 'integer',
-            title: 'One 0 2'
-        },
-        two_0_4: {
-            type: 'integer',
-            title: 'Two 0 4'
-        },
-        three_0_6: {
-            type: 'integer',
-            title: 'Three 0 6'
-        },
-        four_0_8: {
-            type: 'integer',
-            title: 'Four 0 8'
-        },
-        five_1: {
-            type: 'integer',
-            title: 'Five 1'
+        bands: {
+            items: {
+                type: 'integer'
+            },
+            type: 'array',
+            title: 'Bands'
         }
     },
     type: 'object',
-    required: ['one_0_2', 'two_0_4', 'three_0_6', 'four_0_8', 'five_1'],
+    required: ['bands'],
     title: 'Barchart_risk_bands_Data'
 } as const;
 
@@ -114,145 +101,19 @@ export const HTTPValidationErrorSchema = {
 
 export const HeatMap_DataSchema = {
     properties: {
-        Column_POS: {
-            prefixItems: [
-                {
-                    type: 'integer'
+        heat: {
+            items: {
+                items: {
+                    type: 'number'
                 },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
+                type: 'array'
+            },
             type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Column Pos'
-        },
-        POS_fraud: {
-            prefixItems: [
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Pos Fraud'
-        },
-        Column_Online: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Column Online'
-        },
-        Online_fraud: {
-            prefixItems: [
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Online Fraud'
-        },
-        Column_ATM_Withdrawal: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Column Atm Withdrawal'
-        },
-        ATM_Withdrawal_fraud: {
-            prefixItems: [
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Atm Withdrawal Fraud'
-        },
-        Column_Bank_Transfer: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Column Bank Transfer'
-        },
-        Bank_Transfer_fraud: {
-            prefixItems: [
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                },
-                {
-                    type: 'number'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Bank Transfer Fraud'
+            title: 'Heat'
         }
     },
     type: 'object',
-    required: ['Column_POS', 'POS_fraud', 'Column_Online', 'Online_fraud', 'Column_ATM_Withdrawal', 'ATM_Withdrawal_fraud', 'Column_Bank_Transfer', 'Bank_Transfer_fraud'],
+    required: ['heat'],
     title: 'HeatMap_Data'
 } as const;
 
@@ -356,145 +217,37 @@ export const RadialPolarBarSchema = {
 
 export const Sankey_DataSchema = {
     properties: {
-        Transaction_count: {
-            type: 'integer',
-            title: 'Transaction Count'
-        },
-        Transaction_Type_Values: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
+        Links: {
+            items: {
+                '$ref': '#/components/schemas/Sankey_Link'
+            },
             type: 'array',
-            maxItems: 4,
-            minItems: 4,
-            title: 'Transaction Type Values'
-        },
-        Ttype_DeType_Laptop_Values: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 4,
-            minItems: 4,
-            title: 'Ttype Detype Laptop Values'
-        },
-        Ttype_DeType_Tablet_Values: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 4,
-            minItems: 4,
-            title: 'Ttype Detype Tablet Values'
-        },
-        Ttype_DeType_Mobile_Values: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 4,
-            minItems: 4,
-            title: 'Ttype Detype Mobile Values'
-        },
-        DeType_High_Risk_Values: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Detype High Risk Values'
-        },
-        DeType_Medium_Risk_Values: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Detype Medium Risk Values'
-        },
-        DeType_Low_Risk_Values: {
-            prefixItems: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'integer'
-                }
-            ],
-            type: 'array',
-            maxItems: 3,
-            minItems: 3,
-            title: 'Detype Low Risk Values'
+            title: 'Links'
         }
     },
     type: 'object',
-    required: ['Transaction_count', 'Transaction_Type_Values', 'Ttype_DeType_Laptop_Values', 'Ttype_DeType_Tablet_Values', 'Ttype_DeType_Mobile_Values', 'DeType_High_Risk_Values', 'DeType_Medium_Risk_Values', 'DeType_Low_Risk_Values'],
+    required: ['Links'],
     title: 'Sankey_Data'
+} as const;
+
+export const Sankey_LinkSchema = {
+    properties: {
+        From: {
+            type: 'string',
+            title: 'From'
+        },
+        To: {
+            type: 'string',
+            title: 'To'
+        },
+        Value: {
+            type: 'integer',
+            title: 'Value'
+        }
+    },
+    type: 'object',
+    required: ['From', 'To', 'Value'],
+    title: 'Sankey_Link'
 } as const;
 
 export const TokenSchema = {

@@ -1,116 +1,117 @@
 import { createFileRoute } from "@tanstack/react-router"
-
-/*
+import { useSuspenseQuery } from "@tanstack/react-query"
+import PolarBarChart from "@/components/visuals/polar"
+import ExConButton from "@/components/visuals/ExpandContractButton"
 import { useState } from "react";
+import { VisualsService } from "@/client"
 
-export default function ExpandableQuadrants() {
-  const [expanded, setExpanded] = useState<number | null>(null);
 
-  const panels = [
-    {
-      id: 1,
-      title: "1",
-      color: "bg-red-500",
-      position: "top-0 left-0",
-    },
-    {
-      id: 2,
-      title: "2",
-      color: "bg-blue-500",
-      position: "top-0 right-0",
-    },
-    {
-      id: 3,
-      title: "3",
-      color: "bg-green-500",
-      position: "bottom-0 left-0",
-    },
-    {
-      id: 4,
-      title: "4",
-      color: "bg-yellow-500",
-      position: "bottom-0 right-0",
-    },
-  ];
 
-  return (
-    <div className="relative w-screen h-screen overflow-hidden bg-black">
-      {panels.map((panel) => {
-        const isExpanded = expanded === panel.id;
-        const isHidden = expanded !== null && expanded !== panel.id;
-
-        return (
-          <div
-            key={panel.id}
-            onClick={() => {
-              if (expanded === null) {
-                setExpanded(panel.id);
-              }
-            }}
-            className={`
-              absolute
-              flex
-              items-center
-              justify-center
-              text-white
-              text-4xl
-              font-bold
-              cursor-pointer
-              transition-all
-              duration-500
-              overflow-hidden
-              ${panel.color}
-
-              ${
-                isExpanded
-                  ? "w-screen h-screen top-0 left-0 z-20"
-                  : "w-1/2 h-1/2"
-              }
-
-              ${!isExpanded ? panel.position : ""}
-
-              ${
-                isHidden
-                  ? "opacity-0 scale-90 pointer-events-none"
-                  : "opacity-100 scale-100"
-              }
-            `}
-          >
-            {isExpanded && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setExpanded(null);
-                }}
-                className="
-                  absolute
-                  top-5
-                  left-5
-                  w-12
-                  h-12
-                  rounded-full
-                  bg-white/20
-                  backdrop-blur-md
-                  text-white
-                  text-2xl
-                  flex
-                  items-center
-                  justify-center
-                  hover:bg-white/30
-                  transition
-                "
-              >
-                ←
-              </button>
-            )}
-
-            {panel.title}
-          </div>
-        );
-      })}
-    </div>
-  );
+function getCharts() {
+  return {
+    queryFn: () => VisualsService.readKpis(),
+    queryKey: ["kpis"],
+  }
 }
+
+
+
+
+export default function Dashboard() {
+  const {data: { RadialPolar }}= useSuspenseQuery(getCharts())
+
+  const [expandedChart, setExpandedChart] = useState<string | null>(null);
+  
+  const handleToggle = (id: string) => {
+    setExpandedChart(() => (expandedChart? null:id));
+  };
+  
+  return(<div style={{ position: "absolute", width: "100%", height: "100%", minHeight: "350px" }} >
+  <PolarBarChart data={RadialPolar.Hours}>
+    <ExConButton onToggleExpand={handleToggle} id="PolarBarChart" IsExpanded={expandedChart}/>
+  </PolarBarChart>
+  </div>)
+  
+}
+/*
+    const [expandedChart, setExpandedChart] = useState<string | null>(null);
+    
+
+
+    return((
+    <div style={{ padding: "24px", maxWidth: "1200px", margin: "0 auto" }}>
+      <h1>Analytics Workspace</h1>
+
+      
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gridAutoRows: "400px",
+          gap: "24px",
+          marginTop: "24px",
+          position: "relative"
+        }}
+      >
+        
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "8px",
+            padding: "16px",
+            boxSizing: "border-box",
+            
+            // 2. THE SMOOTH ANIMATION MAGIC:
+            // If expanded, this card overrides the grid layout to span ALL columns and rows
+            gridColumn: expandedChart === "chart-one" ? "1 / -1" : "auto",
+            gridRow: expandedChart === "chart-one" ? "1 / span 2" : "auto",
+            
+            // This forces ECharts container height to stretch dynamically
+            height: "100%", 
+            
+            // Elevate the expanded item above other cards during animation
+            zIndex: expandedChart === "chart-one" ? 10 : 1,
+            
+            // Hardware-accelerated transitions for smooth sizing
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)", 
+          }}
+        >
+          <PolarBarChart data={} title="Regional Distribution">
+            <button
+              onClick={() => setExpandedChart(expandedChart === "chart-one" ? null : "chart-one")}
+              style={buttonStyle}
+            >
+              {expandedChart === "chart-one" ? "✕ Minimize" : "⤢ Expand"}
+            </button>
+          </PolarBarChart>
+        </div>
+
+        
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "8px",
+            padding: "16px",
+            boxSizing: "border-box",
+            gridColumn: expandedChart === "chart-two" ? "1 / -1" : "auto",
+            gridRow: expandedChart === "chart-two" ? "1 / span 2" : "auto",
+            height: "100%",
+            zIndex: expandedChart === "chart-two" ? 10 : 1,
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}
+        >
+          <PolarBarChart data={} title="User Conversion Metrics">
+            <ExConButton/>
+          </PolarBarChart>
+        </div>
+      </div>
+    </div>
+  ));
+}
+
+
 
 
 */
@@ -118,40 +119,9 @@ export default function ExpandableQuadrants() {
 
 
 
-export default function Graphs() {
-            return (
-    <div
-        style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 100px)",
-        gridTemplateRows: "repeat(2, 100px)",
-        gap: "10px"
-        justifyContent:"center",
-        alignItems:"center"
-    }}
->
-<p style={{justifyContent:"center",
-        alignItems:"center"}}>first</p>
-<p style={{justifyContent:"center",
-        alignItems:"center"}}>second</p>
-<p style={{justifyContent:"center",
-        alignItems:"center"}}>third</p>
-<p style={{justifyContent:"center",
-        alignItems:"center"}}>fourth</p>
-    </div>)
-
-
-}
-
-
-
-
-
-
-
 
 export const Route = createFileRoute("/_layout/graphs")({
-component: Graphs,
+component: Dashboard,
 head: () => ({
     meta: [
     {
