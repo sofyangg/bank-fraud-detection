@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import PolarBarChart from "@/components/visuals/polar"
+import HeatMaps from "@/components/visuals/heatmap"
 import ExConButton from "@/components/visuals/ExpandContractButton"
+import BinChart from "@/components/visuals/BarChart"
+import SankeyD from "@/components/visuals/SankeyDiagram"
 import { useState } from "react";
 import { VisualsService } from "@/client"
 
@@ -18,7 +21,7 @@ function getCharts() {
 
 
 export default function Dashboard() {
-  const {data: { RadialPolar }}= useSuspenseQuery(getCharts())
+  const {data: { RadialPolar,HeatMap,Barchart,Sankey }}= useSuspenseQuery(getCharts())
 
   const [expandedChart, setExpandedChart] = useState<string | null>(null);
   
@@ -26,97 +29,22 @@ export default function Dashboard() {
     setExpandedChart(() => (expandedChart? null:id));
   };
   
-  return(<div style={{ position: "absolute", width: "100%", height: "100%", minHeight: "350px" }} >
+  return(<div className="grid grid-cols-2 grid-rows-2 gap-4 w-full h-full">
   <PolarBarChart data={RadialPolar.Hours}>
     <ExConButton onToggleExpand={handleToggle} id="PolarBarChart" IsExpanded={expandedChart}/>
   </PolarBarChart>
+  <HeatMaps data={HeatMap.heat}>
+    <ExConButton onToggleExpand={handleToggle} id="HeatMap" IsExpanded={expandedChart}/>
+  </HeatMaps>
+  <BinChart data={Barchart.bands}>
+    <ExConButton onToggleExpand={handleToggle} id="Barchart" IsExpanded={expandedChart}/>
+  </BinChart>
+  <SankeyD data={Sankey.Links}>
+    <ExConButton onToggleExpand={handleToggle} id="Sankey" IsExpanded={expandedChart}/>
+  </SankeyD>
   </div>)
   
 }
-/*
-    const [expandedChart, setExpandedChart] = useState<string | null>(null);
-    
-
-
-    return((
-    <div style={{ padding: "24px", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1>Analytics Workspace</h1>
-
-      
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gridAutoRows: "400px",
-          gap: "24px",
-          marginTop: "24px",
-          position: "relative"
-        }}
-      >
-        
-        <div
-          style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #e2e8f0",
-            borderRadius: "8px",
-            padding: "16px",
-            boxSizing: "border-box",
-            
-            // 2. THE SMOOTH ANIMATION MAGIC:
-            // If expanded, this card overrides the grid layout to span ALL columns and rows
-            gridColumn: expandedChart === "chart-one" ? "1 / -1" : "auto",
-            gridRow: expandedChart === "chart-one" ? "1 / span 2" : "auto",
-            
-            // This forces ECharts container height to stretch dynamically
-            height: "100%", 
-            
-            // Elevate the expanded item above other cards during animation
-            zIndex: expandedChart === "chart-one" ? 10 : 1,
-            
-            // Hardware-accelerated transitions for smooth sizing
-            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)", 
-          }}
-        >
-          <PolarBarChart data={} title="Regional Distribution">
-            <button
-              onClick={() => setExpandedChart(expandedChart === "chart-one" ? null : "chart-one")}
-              style={buttonStyle}
-            >
-              {expandedChart === "chart-one" ? "✕ Minimize" : "⤢ Expand"}
-            </button>
-          </PolarBarChart>
-        </div>
-
-        
-        <div
-          style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #e2e8f0",
-            borderRadius: "8px",
-            padding: "16px",
-            boxSizing: "border-box",
-            gridColumn: expandedChart === "chart-two" ? "1 / -1" : "auto",
-            gridRow: expandedChart === "chart-two" ? "1 / span 2" : "auto",
-            height: "100%",
-            zIndex: expandedChart === "chart-two" ? 10 : 1,
-            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-          }}
-        >
-          <PolarBarChart data={} title="User Conversion Metrics">
-            <ExConButton/>
-          </PolarBarChart>
-        </div>
-      </div>
-    </div>
-  ));
-}
-
-
-
-
-*/
-
-
 
 
 

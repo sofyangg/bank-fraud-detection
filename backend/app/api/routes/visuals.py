@@ -107,8 +107,9 @@ ORDER BY
         print("TxType")
         for row in TxType:
             print(row)
-            for i in range(4):
-                all_Links.append(Sankey_Link(From="Transactions",To=TxTypes[i],Value=TxType[i][0]))
+        for i in range(4):  
+            print(("Transactions",TxTypes[i],TxType[i][0]))
+            all_Links.append(Sankey_Link(From="Transactions",To=TxTypes[i],Value=TxType[i][0]))
         if not TxType:
             raise HTTPException(status_code=404, detail="No TxType data found")
         device_types=["Laptop","Tablet","Mobile"]
@@ -141,7 +142,8 @@ ORDER BY
             print(row)
         for i in range(0,12,3):
             for j in range(3):
-                all_Links.append(Sankey_Link(From=TxTypes[i//3],To=device_types[j],Value=DeviceType[i+j]))
+                print((TxTypes[i//3],device_types[j],DeviceType[i+j][2]))
+                all_Links.append(Sankey_Link(From=TxTypes[i//3],To=device_types[j],Value=DeviceType[i+j][2]))
         if not DeviceType:
             raise HTTPException(status_code=404, detail="No DeviceType data found")
         risk=["Low Risk","Medium Risk","High Risk"]
@@ -172,10 +174,7 @@ ORDER BY
             print(row)
         for i in range(1,4):
             for j in range(3):
-                all_Links.append(Sankey_Link(From=device_types[j],To=risk[i-1],Value=RiskQuery[i]))
-        Low_Risk=(RiskQuery[0][1],RiskQuery[1][1],RiskQuery[2][1])
-        Medium_Risk=(RiskQuery[0][2],RiskQuery[1][2],RiskQuery[2][2])
-        High_Risk=(RiskQuery[0][3],RiskQuery[1][3],RiskQuery[2][3])
+                all_Links.append(Sankey_Link(From=device_types[j],To=risk[i-1],Value=RiskQuery[j][i]))
         Sankeyss=Sankey_Data(Links=all_Links)
         return Visuals(RadialPolar=RadialPolarBar_DATA,HeatMap=HeatMap_VS_Data,Barchart=BarchartData,Sankey=Sankeyss)
     except Exception as e:

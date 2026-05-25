@@ -3,12 +3,12 @@ import  { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
 type Props = {
-  data:number[][];
+  data:number[];
   title?: string;
   children?: React.ReactNode;
 };
 
-export default function HeatMaps({ data, title, children }: Props) {
+export default function BinChart({ data, title, children }: Props) {
   const chartRef = useRef<HTMLDivElement | null>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
   useEffect(() => {
@@ -20,59 +20,27 @@ export default function HeatMaps({ data, title, children }: Props) {
     }
 
     const chart = chartInstanceRef.current;
-    
-    const TxTypes=["PoS","On","ATM ","Bank"];
-    
-    const device_types=["Laptop","Tablet","Mobile"];
+    const bands=["0-20%","20-40%","40-60%","60-80%","80-100%"]
     
     const option: echarts.EChartsOption = {
-  tooltip: {
-    position: 'top'
-  },
-  grid: {
-    height: '50%',
-    top: '10%'
-  },
   xAxis: {
     type: 'category',
-    data: TxTypes,
-    splitArea: {
-      show: true
-    }
+    data:bands
   },
   yAxis: {
-    type: 'category',
-    data: device_types,
-    splitArea: {
-      show: true
-    }
+    type: 'value'
   },
-  visualMap: {
-    min: 0,
-    max: 0.5,
-    calculable: true,
-    orient: 'horizontal',
-    left: 'center',
-    bottom: '15%'
-  },
-  series:[
+  series: [
     {
-      name:'Punch Card',
-      type:'heatmap',
-      data: data,
-      label: {
-        show: true
-      },
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
+      data:data,
+      type: 'bar',
+      showBackground: true,
+      backgroundStyle: {
+        color: 'rgba(180, 180, 180, 0.2)'
       }
     }
   ]
 };
-
     chart.setOption(option);
 
     const resizeObserver = new ResizeObserver(() => {
