@@ -48,8 +48,8 @@ export default function HeatMaps({ data, title, children }: Props) {
     }
   },
   visualMap: {
-    min: 0,
-    max: 0.5,
+    min: 0.4,
+    max: 0.45,
     calculable: true,
     orient: 'horizontal',
     left: 'center',

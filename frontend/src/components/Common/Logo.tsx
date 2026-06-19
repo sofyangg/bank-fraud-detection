@@ -29,17 +29,17 @@ export function Logo({
       <>
         <img
           src={fullLogo}
-          alt="FastAPI"
+          alt="FastAPI       login"
           className={cn(
-            "h-6 w-auto group-data-[collapsible=icon]:hidden",
+            "h-20 w-20 group-data-[collapsible=icon]:hidden",
             className,
           )}
         />
         <img
           src={iconLogo}
-          alt="FastAPI"
+          alt="FastAPI idkkk"
           className={cn(
-            "size-5 hidden group-data-[collapsible=icon]:block",
+            "size-20 hidden group-data-[collapsible=icon]:block",
             className,
           )}
         />
@@ -47,8 +47,8 @@ export function Logo({
     ) : (
       <img
         src={variant === "full" ? fullLogo : iconLogo}
-        alt="FastAPI"
-        className={cn(variant === "full" ? "h-6 w-auto" : "size-5", className)}
+        alt="FastAPI aaaaaaaaa"
+        className={cn(variant === "full" ? "h-20 w-70" : "size-12", className)}
       />
     )
 

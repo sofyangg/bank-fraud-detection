@@ -11,6 +11,7 @@
     "test:ui": "bun run --filter frontend test:ui"
   },
   "dependencies": {
+    "@playwright/test": "^1.60.0",
     "usehooks-ts": "^3.1.1"
   }
 }

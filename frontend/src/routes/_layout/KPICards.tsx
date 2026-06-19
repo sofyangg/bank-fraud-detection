@@ -114,7 +114,7 @@ export const Route = createFileRoute("/_layout/KPICards")({
   head: () => ({
     meta: [
       {
-        title: "KPIs Sphynx",
+        title: "KPIs - Sphynx",
       },
     ],
   }),
