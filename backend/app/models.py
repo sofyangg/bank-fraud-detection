@@ -204,3 +204,8 @@ class Visuals(SQLModel):
     HeatMap:HeatMap_Data
     Barchart:Barchart_risk_bands_Data
     Sankey:Sankey_Data
+
+class TxsBag(SQLModel):
+    txs: List[Transaction]
+
+

@@ -1,5 +1,5 @@
 import uuid
-from typing import Any,List
+from typing import Any,List,Optional
 
 from sqlmodel import Session, select
 
@@ -73,7 +73,16 @@ def add_transactions(*, session: Session, transactions_in: List[dict]):
     session.commit()
     return {"status": "success"}
 
-
+def get_transactions_page(session: Session, last_id: Optional[str] = None):
+    # 1. Build the base query
+    statement = select(Transaction).order_by(Transaction.Transaction_ID).limit(50)
+    
+    # 2. Only add the where clause if we have a bookmark ID
+    if last_id:
+        statement = statement.where(Transaction.Transaction_ID > last_id)
+        
+    return list(session.exec(statement).all())
+    
 ### 4. Turn the DataFrame into a list of dictionaries
 # 'records' creates: [{"col1": val1}, {"col2": val2}]
 #data_dicts = df.to_dict(orient="records")
