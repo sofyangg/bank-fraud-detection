@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { KpisReadKpisResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, TransactionsAddTxData, TransactionsAddTxResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse, VisualsReadKpisResponse } from './types.gen';
+import type { KpisReadKpisResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, TransactionsAddTxData, TransactionsAddTxResponse, TxsReadTableData, TxsReadTableResponse, TxsUpdateTxData, TxsUpdateTxResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse, VisualsReadKpisResponse } from './types.gen';
 
 export class KpisService {
     /**
@@ -152,6 +152,51 @@ export class TransactionsService {
             url: '/api/v1/transactions/upload',
             formData: data.formData,
             mediaType: 'multipart/form-data',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class TxsService {
+    /**
+     * Read Table
+     * @param data The data for the request.
+     * @param data.lastId
+     * @returns TxsBag Successful Response
+     * @throws ApiError
+     */
+    public static readTable(data: TxsReadTableData = {}): CancelablePromise<TxsReadTableResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/TXs/',
+            query: {
+                last_ID: data.lastId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Tx
+     * @param data The data for the request.
+     * @param data.txId
+     * @param data.requestBody
+     * @returns Transaction Successful Response
+     * @throws ApiError
+     */
+    public static updateTx(data: TxsUpdateTxData): CancelablePromise<TxsUpdateTxResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/TXs/{tx_id}',
+            path: {
+                tx_id: data.txId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: 'Validation Error'
             }

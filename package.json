@@ -11,6 +11,8 @@
     "test:ui": "bun run --filter frontend test:ui"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.36.0",
+    "@emotion/react": "^11.14.0",
     "@playwright/test": "^1.60.0",
     "usehooks-ts": "^3.1.1"
   }

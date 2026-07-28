@@ -93,6 +93,10 @@ export type Transaction = {
     Card_Age: number;
 };
 
+export type TxsBag = {
+    txs: Array<Transaction>;
+};
+
 export type UpdatePassword = {
     current_password: string;
     new_password: string;
@@ -191,6 +195,19 @@ export type TransactionsAddTxData = {
 };
 
 export type TransactionsAddTxResponse = (Array<Transaction>);
+
+export type TxsReadTableData = {
+    lastId?: (string | null);
+};
+
+export type TxsReadTableResponse = (TxsBag);
+
+export type TxsUpdateTxData = {
+    requestBody: Transaction;
+    txId: string;
+};
+
+export type TxsUpdateTxResponse = (Transaction);
 
 export type UsersReadUsersData = {
     limit?: number;

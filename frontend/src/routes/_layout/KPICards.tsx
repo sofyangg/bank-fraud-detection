@@ -1,5 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
+import { TransactionTable } from "@/components/Common/txsTable"
+//import { Provider } from "@/components/ui/provider"
 
 import {
   AlertTriangle,
@@ -7,8 +9,7 @@ import {
   /*
 import { Suspense } from "react"
 */
-
-import { KpisService } from "@/client"
+import { KpisService ,TxsService} from "@/client"
 /*
 import AddItem from "@/components/Items/AddItem"
 import { columns } from "@/components/Items/columns"
@@ -22,14 +23,21 @@ function getKPISummary() {
   }
 }
 
+function getTable() {
+  return {
+    queryFn: () => TxsService.readTable(),
+    queryKey: ["txs"],
+  }
+}
 
-function KPICards() {
 
-  const { data } = useSuspenseQuery(getKPISummary())
+function Cards() {
+  
+  const { data } = useSuspenseQuery(getKPISummary());
   return (
     <div className="grid grid-cols-12 gap-6">
       {/* Total Analyzed */}
-      <div className="col-span-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="col-span-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm font-medium text-gray-500">
@@ -55,7 +63,7 @@ function KPICards() {
       </div>
 
       {/* Flagged Transactions */}
-      <div className="col-span-3 rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+      <div className="col-span-4 rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm font-medium text-red-600">
@@ -81,7 +89,7 @@ function KPICards() {
       </div>
 
       {/* Avg Top Decile Risk */}
-      <div className="col-span-3 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="col-span-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm font-medium text-gray-500">
@@ -103,14 +111,34 @@ function KPICards() {
         </div>
       </div>
     </div>
-)}
+);}
 
+
+function Tx_Table(){
+  const { data } = useSuspenseQuery(getTable());
+    return (
+    <TransactionTable  dataBag={data} />
+    );
+    
+}
+
+function KPIs()
+{
+  return(
+    
+    <div className="flex flex-col gap-6">
+    <Cards/>
+    <Tx_Table />
+    </div>
+  );
+
+}
 
 
 
 
 export const Route = createFileRoute("/_layout/KPICards")({
-  component: KPICards,
+  component: KPIs,
   head: () => ({
     meta: [
       {

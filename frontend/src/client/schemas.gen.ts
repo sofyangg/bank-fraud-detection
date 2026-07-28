@@ -378,6 +378,21 @@ export const TransactionSchema = {
     title: 'Transaction'
 } as const;
 
+export const TxsBagSchema = {
+    properties: {
+        txs: {
+            items: {
+                '$ref': '#/components/schemas/Transaction'
+            },
+            type: 'array',
+            title: 'Txs'
+        }
+    },
+    type: 'object',
+    required: ['txs'],
+    title: 'TxsBag'
+} as const;
+
 export const UpdatePasswordSchema = {
     properties: {
         current_password: {

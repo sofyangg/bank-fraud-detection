@@ -83,6 +83,15 @@ def get_transactions_page(session: Session, last_id: Optional[str] = None):
         
     return list(session.exec(statement).all())
     
+def update_tx(*, session: Session, tx: Transaction, tx_in: Transaction) -> Any:
+    tx_data = tx_in.model_dump(exclude_unset=True)
+    tx.sqlmodel_update(tx_data)
+    session.add(tx)
+    session.commit()
+    session.refresh(tx)
+    return tx
+    
+    
 ### 4. Turn the DataFrame into a list of dictionaries
 # 'records' creates: [{"col1": val1}, {"col2": val2}]
 #data_dicts = df.to_dict(orient="records")
